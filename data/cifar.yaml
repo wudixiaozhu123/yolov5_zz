@@ -1,0 +1,9 @@
+# CIFAR-10 数据集的路径配置
+train: data\\dataset\\cifar_cate\\train\\images  # 训练集图片的路径
+val: data\\dataset\\cifar_cate\\val\\images      # 验证集图片的路径
+
+# 类别数量
+nc: 10
+
+# 类别名称，CIFAR-10 的标签类别如下：
+names: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
