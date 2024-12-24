@@ -28,5 +28,11 @@ ultralytics>=8.0.232</br>
 
 Tip:下载项目后，使用pip install -r requirements.txt安装对应依赖即可
 
+指路-->
+优化器替换-yolov5-master下的train.py文件</br>
+在此处选择合适的优化器，parser.add_argument("--optimizer", type=str, choices=["SGD", "Adam", "AdamW"], default="Adam", help="optimizer")
+在此处配置对应超参数，parser.add_argument("--hyp", type=str, default=ROOT / "data/hyps/hyp.scratch-low.yaml", help="hyperparameters path")
+在此处查看当前网络，parser.add_argument("--cfg", type=str, default="C:\\yolov5-master\\models\\yolov5s.yaml", help="model.yaml path")
+
 关于核心代码部分的介绍与使用:
 此部分等项目更新后会放出，因为项目目前再跑另外一个实验，代码部分还没有整合
