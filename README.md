@@ -50,5 +50,4 @@ Tips:请先安装GPU版本的torch,然后,使用pip install -r requirements.txt�
 在此处配置对应超参数，parser.add_argument("--hyp", type=str, default=ROOT / "data/hyps/hyp.scratch-low.yaml", help="hyperparameters path")</br>
 在此处查看当前网络，parser.add_argument("--cfg", type=str, default="C:\\yolov5-master\\models\\yolov5s.yaml", help="model.yaml path")</br>
 
-关于核心代码部分的介绍与使用:</br>
-我在commit代码到github上的时候遇到了错误。。。解决中
+
