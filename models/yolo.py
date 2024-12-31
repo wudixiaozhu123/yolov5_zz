@@ -112,15 +112,16 @@ class Detect(nn.Module):
 
         return x if self.training else (torch.cat(z, 1),) if self.export else (torch.cat(z, 1), x)
 
-    def _make_grid(self, nx=20, ny=20, i=0, torch_1_10=check_version(torch.__version__, "1.10.0")):
-        d = self.anchors[i].device
-        t = self.anchors[i].dtype
-        shape = 1, self.na, ny, nx, 2  # grid shape
-        y, x = torch.arange(ny, device=d, dtype=t), torch.arange(nx, device=d, dtype=t)
-        yv, xv = torch.meshgrid(y, x, indexing="ij") if torch_1_10 else torch.meshgrid(y, x)  # torch>=0.7 compatibility
-        grid = torch.stack((xv, yv), 2).expand(shape) - 0.5  # add grid offset, i.e. y = 2.0 * x - 0.5
-        anchor_grid = (self.anchors[i] * self.stride[i]).view((1, self.na, 1, 1, 2)).expand(shape)
-        return grid, anchor_grid
+    # def _make_grid(self, nx=20, ny=20, i=0, torch_1_10=check_version(torch.__version__, "1.10.0")):
+    #     d = self.anchors[i].device
+    #     t = self.anchors[i].dtype
+    #     shape = 1, self.na, ny, nx, 2  # grid shape
+    #     y, x = torch.arange(ny, device=d, dtype=t), torch.arange(nx, device=d, dtype=t)
+    #     yv, xv = torch.meshgrid(y, x, indexing="ij") if torch_1_10 else torch.meshgrid(y, x)  # torch>=0.7 compatibility
+    #     grid = torch.stack((xv, yv), 2).expand(shape) - 0.5  # add grid offset, i.e. y = 2.0 * x - 0.5
+    #     anchor_grid = (self.anchors[i] * self.stride[i]).view((1, self.na, 1, 1, 2)).expand(shape)
+    #     return grid, anchor_grid
+
 
 
 class Segment(Detect):
@@ -139,6 +140,15 @@ class Segment(Detect):
         x = self.detect(self, x)
         return (x, p) if self.training else (x[0], p) if self.export else (x[0], p, x[1])
 
+class Classifier(nn.Module):
+    def __init__(self, nc):
+        super(Classifier, self).__init__()
+        self.nc = nc  # number of classes
+        self.conv = nn.Conv2d(512, nc, kernel_size=1)  # output only `nc` classes
+
+    def forward(self, x):
+        x = self.conv(x)
+        return x.sigmoid()  # Apply sigmoid for class probability
 
 class BaseModel(nn.Module):
     # YOLOv5 base model
